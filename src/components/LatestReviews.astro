@@ -1,0 +1,57 @@
+---
+import ComingSoonCard from './ComingSoonCard.astro';
+import ReviewCard from './ReviewCard.astro';
+import SectionHeading from './SectionHeading.astro';
+import type { Review } from '../lib/types';
+import { latest } from '../data/site';
+
+interface Props {
+  reviews: Review[];
+}
+
+const { reviews } = Astro.props;
+
+// Fill the rest of the row with "Coming soon" cards
+const fillers = Math.max(0, latest.columns - reviews.length);
+---
+
+<section class="section" id="latest">
+  <div class="container">
+    <SectionHeading label={latest.label} link={latest.link} />
+    <div class="grid">
+      {reviews.map((review, i) => <ReviewCard review={review} number={i + 1} />)}
+      {
+        Array.from({ length: fillers }, (_, i) => (
+          <div class="filler">
+            <ComingSoonCard number={reviews.length + i + 1} />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  /* Wrapper keeps the filler the same height as its row neighbours */
+  .filler {
+    display: grid;
+  }
+
+  @media (max-width: 1000px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

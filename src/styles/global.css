@@ -1,0 +1,344 @@
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg-deep);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+p {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Whole-site frame: keeps full-bleed art from stretching on wide monitors */
+.site {
+  /* Column layout so <main> can grow and push the footer to the bottom */
+  display: flex;
+  flex-direction: column;
+  max-width: var(--site-max);
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin-inline: auto;
+  background: var(--bg);
+}
+
+.site > main {
+  flex: 1;
+}
+
+@media (min-width: 1601px) {
+  .site {
+    border-inline: 1px solid var(--border);
+    box-shadow: 0 0 80px rgb(0 0 0 / 0.5);
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: calc(var(--container) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.section {
+  padding-block: var(--section-gap);
+  border-top: 1px solid var(--border);
+}
+
+/*
+ * HUD corner brackets that lock on when a card is hovered/focused.
+ * Usage: <span class="brackets" aria-hidden="true"></span> as a direct
+ * child of a position: relative element.
+ */
+.brackets {
+  position: absolute;
+  inset: 8px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.brackets::before,
+.brackets::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--accent);
+  opacity: 0;
+  filter: drop-shadow(0 0 4px rgb(99 214 197 / 0.6));
+  transition:
+    opacity 0.25s,
+    transform 0.25s ease-out;
+}
+
+.brackets::before {
+  top: 0;
+  left: 0;
+  border-right: 0;
+  border-bottom: 0;
+  transform: translate(-6px, -6px);
+}
+
+.brackets::after {
+  right: 0;
+  bottom: 0;
+  border-left: 0;
+  border-top: 0;
+  transform: translate(6px, 6px);
+}
+
+:hover > .brackets::before,
+:hover > .brackets::after,
+:focus-visible > .brackets::before,
+:focus-visible > .brackets::after {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brackets::before,
+  .brackets::after {
+    transition: opacity 0.25s;
+    transform: none;
+  }
+}
+
+/*
+ * HUD ruler divider: a baseline with a bright lead segment and hanging tick
+ * marks, like an instrument scale. Not used yet; saved for the About page.
+ * Usage: <hr class="hud-ruler" />
+ */
+.hud-ruler {
+  height: 9px;
+  margin: 0;
+  border: 0;
+  background:
+    linear-gradient(var(--accent), var(--accent)) 0 0 / 4rem 1px no-repeat,
+    linear-gradient(var(--border-strong), var(--border-strong)) 0 0 / 100% 1px no-repeat,
+    repeating-linear-gradient(90deg, var(--border-strong) 0 1px, transparent 1px 50px) 0 0 / 100% 9px no-repeat,
+    repeating-linear-gradient(90deg, var(--border) 0 1px, transparent 1px 10px) 0 0 / 100% 5px no-repeat;
+}
+
+/*
+ * Glitchy "signal acquired" flicker, shared by the hero HUD and the review
+ * breadcrumb. Starts visible so a paused/throttled animation never hides text.
+ */
+@keyframes hud-acquire {
+  0% {
+    opacity: 1;
+  }
+  5% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    text-shadow: -2px 0 var(--accent), 2px 0 #ff4fd8;
+  }
+  20% {
+    opacity: 0.2;
+  }
+  35% {
+    opacity: 1;
+    text-shadow: 2px 0 var(--accent), -2px 0 #ff4fd8;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  65%,
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 8px rgb(99 214 197 / 0.6);
+  }
+}
+
+/* Rich text (Markdown pages such as About) */
+.prose {
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.85;
+}
+
+.prose > * + * {
+  margin-top: 1.25em;
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+  color: var(--text);
+  margin-top: 2em;
+}
+
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: rgb(99 214 197 / 0.45);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition:
+    color 0.2s,
+    text-decoration-color 0.2s,
+    text-underline-offset 0.2s,
+    text-shadow 0.2s;
+}
+
+/* Brighter, glowing link with the underline dropping away slightly */
+.prose a:hover,
+.prose a:focus-visible {
+  color: var(--accent-strong);
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+  text-shadow: 0 0 12px rgb(99 214 197 / 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prose a {
+    transition: none;
+  }
+}
+
+/* Pull quote: lit HUD panel with a glowing accent bar and big corner quote marks */
+.prose blockquote {
+  position: relative;
+  margin: 2.25em 0;
+  padding: 2.25rem 2.5rem 2.25rem 2.75rem;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background:
+    linear-gradient(90deg, rgb(99 214 197 / 0.1), transparent 70%),
+    repeating-linear-gradient(0deg, rgb(99 214 197 / 0.03) 0 1px, transparent 1px 6px),
+    var(--surface);
+  box-shadow:
+    -6px 0 18px -10px var(--accent),
+    inset 0 0 40px rgb(0 0 0 / 0.25);
+  color: var(--text);
+  font-size: 1.15em;
+  font-style: italic;
+  line-height: 1.7;
+}
+
+.prose blockquote > * + * {
+  margin-top: 0.9em;
+}
+
+.prose blockquote::before,
+.prose blockquote::after {
+  position: absolute;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 4.5rem;
+  font-style: normal;
+  line-height: 1;
+  color: var(--accent);
+  text-shadow: 0 0 18px rgb(99 214 197 / 0.5);
+  pointer-events: none;
+}
+
+.prose blockquote::before {
+  content: '\201C';
+  top: 0.35rem;
+  left: 0.6rem;
+}
+
+.prose blockquote::after {
+  content: '\201D';
+  right: 0.9rem;
+  bottom: -1.6rem;
+  opacity: 0.55;
+}
+
+@media (max-width: 560px) {
+  .prose blockquote {
+    padding: 2rem 1.25rem 2rem 1.75rem;
+    font-size: 1.05em;
+  }
+
+  .prose blockquote::before,
+  .prose blockquote::after {
+    font-size: 3.5rem;
+  }
+
+  .prose blockquote::before {
+    top: 0.2rem;
+    left: 0.35rem;
+  }
+}
+
+.prose img {
+  /* Centred when narrower than the column */
+  margin-inline: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+}

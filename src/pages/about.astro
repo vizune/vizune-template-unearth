@@ -1,0 +1,12 @@
+---
+import SimplePage from '../components/SimplePage.astro';
+import SpecsPanel from '../components/SpecsPanel.astro';
+import { about } from '../data/site';
+// Page copy lives in src/content/about.md (Markdown, no CMS needed)
+import { Content, frontmatter } from '../content/about.md';
+---
+
+<SimplePage title={frontmatter.title || 'About'} eyebrow={about.label}>
+  <Content />
+  <SpecsPanel slot="aside" />
+</SimplePage>
